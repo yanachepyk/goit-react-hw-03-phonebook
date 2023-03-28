@@ -18,6 +18,12 @@ export class App extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts.length !== prevState.contacts.length) {
+      localStorage.setItem('contact', JSON.stringify(this.state.contacts));
+    }
+  }
+
   handleFormSubmit = event => {
     event.preventDefault();
     const { name, number } = event.target.elements;
@@ -39,7 +45,6 @@ export class App extends Component {
           };
         },
         () => {
-          localStorage.setItem('contact', JSON.stringify(this.state.contacts));
           event.target.reset();
         }
       );
@@ -55,9 +60,6 @@ export class App extends Component {
       ...prevState,
       contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
-    let contacts = JSON.parse(localStorage.getItem('contact'));
-    contacts = contacts.filter(contact => contact.id !== id);
-    localStorage.setItem('contact', JSON.stringify(contacts));
   };
 
   render() {
